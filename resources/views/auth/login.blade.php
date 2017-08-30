@@ -61,6 +61,9 @@
                         </div>
                     </form>
                 </div>
+                <div class="panel-footer">
+                    Login with username : admin@admin.com . Password : secret
+                </div>
             </div>
         </div>
     </div>
