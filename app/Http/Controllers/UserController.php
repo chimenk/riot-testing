@@ -7,11 +7,22 @@ use App\User;
 
 class UserController extends Controller
 {
+	 /**
+     * Get all user records.
+     *
+     * @return Response
+     */
     public function index()
     {
     	return User::orderBy('updated_at', 'desc')->paginate(10);
     }
 
+     /**
+     * Store new user data.
+     *
+     * @param  int  $id
+     * @return Response
+     */
     public function store(Request $req)
     {
     	$user = new User();
@@ -25,6 +36,13 @@ class UserController extends Controller
     	}
     	return response()->json(['message' => 'error'], 500);
     }
+
+     /**
+     * Update user record.
+     *
+     * @param  int  $id
+     * @return Response
+     */
 
     public function update(Request $req, $id)
     {
@@ -41,11 +59,20 @@ class UserController extends Controller
     	return response()->json(['message' => 'error'], 500);
     }
 
+     /**
+     * Delete user record.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+
     public function destroy($id)
     {
     	$user = User::find($id);
-    	$user->delete();
+    	if($user->delete()){
+    		return response()->json(['message' => 'success'], 200);
+    	}
 
-    	return response()->json(['message' => 'success'], 200);
+    	return response()->json(['message' => 'error'], 500);
     }
 }

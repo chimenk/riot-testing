@@ -131,15 +131,11 @@
 <!-- /.modal-dialog -->
 
 
-<!-- Script section
+<!-- Script section -->
 var self=this
 listData(1,0)
 
-changePage(e) {
-  e.preventDefault()
-  listData(e.item.pageNo, e.item.offset)
-}
-
+<!-- Listing data from API -->
 function listData(pn, ofs) {
   axios.get('/api/user?page=' + pn).then(function (response) {
     self.update({ users: response.data.data })
@@ -150,6 +146,11 @@ function listData(pn, ofs) {
     }else{
       self.prevState = ''
     }
+    if(response.data.next_page_url == null) {
+      self.nextState = 'disabled'
+    }else{
+      self.nextState = ''
+    }
     pagination(ofs)
   })
   .catch(function (error) {
@@ -157,6 +158,7 @@ function listData(pn, ofs) {
   })
 }
 
+<!-- Get clicked row data and assign to edit form -->
 edit_data(e) {
   var item = e.item
   self.edit_id = item._id
@@ -167,12 +169,14 @@ edit_data(e) {
   self.edit_contact = item.contact
 }
 
+<!-- Get ID from clicked row -->
 delete_data(e) {
   var item = e.item
   console.log(item)
   self.delete_id = item._id
 }
 
+<!-- Delete data using API -->
 deleteData(e) {
   e.preventDefault()
   axios.delete('/api/user/' + self.delete_id)
@@ -186,6 +190,7 @@ deleteData(e) {
     })
 }
 
+<!-- Create New User -->
 newuser(e) {
   e.preventDefault()
   var form_data = e.target
@@ -206,6 +211,7 @@ newuser(e) {
   })
 }
 
+<!-- Edit User -->
 submit(e) {
   e.preventDefault()
   var form_data = e.target
@@ -227,6 +233,7 @@ submit(e) {
   })
 }
 
+<!-- Pagination function -->
 function pagination(p){
   var totalPage = Math.ceil(self.total / self.per_page)
   var no = [];
@@ -242,5 +249,11 @@ function pagination(p){
   }
   console.log(no)
   self.update({ paging : no})
+}
+
+<!-- Change listed record function -->
+changePage(e) {
+  e.preventDefault()
+  listData(e.item.pageNo, e.item.offset)
 }
 </users>
